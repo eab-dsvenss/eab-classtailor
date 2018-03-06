@@ -1,0 +1,8 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}Licensed under GNU GENERAL PUBLIC LICENSE
+${licensePrefix}URL: http://www.gnu.org/licenses/gpl.html
+<#if licenseLast??>
+${licenseLast}
+</#if>

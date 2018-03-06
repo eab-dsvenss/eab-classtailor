@@ -1,1 +1,2 @@
-# eab-classtailor
+# eab-adjeloq
+Adjust eloquent models
