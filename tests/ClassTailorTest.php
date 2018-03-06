@@ -24,7 +24,7 @@ class ClassTailorTest extends \Codeception\Test\Unit
     {
         $this->classtailor = new ClassTailor(4);
         $this->filehandler = FileHandler::getInstance();
-        $this->basepath = codecept_root_dir() . "tests/_data/";
+        $this->basepath = codecept_data_dir();
         $this->copyTestClassFile();
         $this->createClassFile();
     }

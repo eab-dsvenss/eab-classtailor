@@ -10,5 +10,5 @@ paths:
     tests: tests
     output: tests/_output
     support: tests/_support
-    data: tests
+    data: tests/_data
      
