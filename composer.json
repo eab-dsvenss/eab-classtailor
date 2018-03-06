@@ -6,11 +6,15 @@
             "name": "Daniel Svensson"
         }
     ],
+    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "se\\eab\\php\\classtailor\\": "src/",
             "se\\eab\\php\\classtailor\\test\\": "tests/src/"
         }
+    },
+    "require": {
+        "php": "^5.3.3 || ^7.0"
     },
     "require-dev": {
         "codeception/base": "^2.4",
