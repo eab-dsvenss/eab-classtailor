@@ -1,5 +1,5 @@
 {
-    "name": "eab-dsvenss/eab-classtailor",
+    "name": "eab/php-classtailor",
     "description": "Package for tailoring php classes from PHP scripts",
     "authors": [
         {
