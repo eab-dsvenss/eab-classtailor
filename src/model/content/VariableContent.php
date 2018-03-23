@@ -17,9 +17,9 @@ use se\eab\php\classtailor\model\content\AppendableContent;
 class VariableContent extends AppendableContent
 {
 
-    public function __construct($varaccess, $varstr)
+    public function __construct($varaccess, $name)
     {
-        $this->content = trim($varaccess) . " " . trim($varstr) . ";";
+        $this->content = trim($varaccess) . " " . trim($name) . ";";
     }
 
 }

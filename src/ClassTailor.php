@@ -16,6 +16,7 @@ use se\eab\php\classtailor\model\FileHandler;
  */
 class ClassTailor
 {
+
     private $classparser;
     private $filehandler;
 
@@ -33,15 +34,20 @@ class ClassTailor
      */
     public function tailorClasses(array $classFiles)
     {
-        foreach ($classFiles as $classFile) {
-            $path = $classFile->getPath();
-            $classcontent = $this->filehandler->getFileContents($path);
-            $this->removeRemovables($classFile->getRemovables(), $classcontent);
-            $this->addDependencies($classFile->getDependencies(), $classcontent);
-            $this->addFunctions($classFile->getFunctions(), $classcontent);
-            $this->addVariables($classFile->getVariables(), $classcontent);
-            $this->filehandler->writeToFile($path, $classcontent);
+        foreach ($classFiles as $classfile) {
+            $this->tailorClass($classfile);
         }
+    }
+
+    public function tailorClass(ClassFile $classFile)
+    {
+        $path = $classFile->getPath();
+        $classcontent = $this->filehandler->getFileContents($path);
+        $this->removeRemovables($classFile->getRemovables(), $classcontent);
+        $this->addDependencies($classFile->getDependencies(), $classcontent);
+        $this->addFunctions($classFile->getFunctions(), $classcontent);
+        $this->addVariables($classFile->getVariables(), $classcontent);
+        $this->filehandler->writeToFile($path, $classcontent);
     }
 
     private function removeRemovables(array $removables, &$classcontent)
