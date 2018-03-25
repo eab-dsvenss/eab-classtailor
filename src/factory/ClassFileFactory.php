@@ -28,6 +28,10 @@ class ClassFileFactory
         ;
     }
     
+    /**
+     * 
+     * @return ClassFileFactoryx
+     */
     public static function getInstance() {
         if(!isset(self::$instance)) {
             self::$instance = new ClassFileFactory();
@@ -67,6 +71,10 @@ class ClassFileFactory
             foreach ($classfileArray['removablefns'] as $removablefn) {
                 $classfile->addRemovable(new RemovableFunction($removablefn['access'], $removablefn['name'], $removablefn['content']));
             }
+        }
+        
+        if(isset($classfileArray["path"])) {
+            $classfile->setPath($classfileArray["path"]);
         }
         
         return $classfile;
