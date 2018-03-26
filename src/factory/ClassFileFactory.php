@@ -11,6 +11,7 @@ use se\eab\php\classtailor\model\content\DependencyContent;
 use se\eab\php\classtailor\model\content\VariableContent;
 use se\eab\php\classtailor\model\content\FunctionContent;
 use se\eab\php\classtailor\model\removable\RemovableFunction;
+use se\eab\php\classtailor\model\replaceable\Replaceable;
 use se\eab\php\classtailor\model\ClassFile;
 
 /**
@@ -72,6 +73,14 @@ class ClassFileFactory
                 $classfile->addRemovable(new RemovableFunction($removablefn['access'], $removablefn['name'], $removablefn['content']));
             }
         }
+        
+        if (isset($classfileArray['replaceables'])) {
+            foreach ($classfileArray['replaceables'] as $replaceable) {
+                $classfile->addReplaceable(new Replaceable($replaceable['pattern'], $replaceable['replacement']));
+            }
+        }
+        
+        
         
         if(isset($classfileArray["path"])) {
             $classfile->setPath($classfileArray["path"]);
