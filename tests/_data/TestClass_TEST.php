@@ -20,7 +20,7 @@ class TestClass
         $testsomething;
     }
 
-    public $variable;
+    private $newvariable;
     public function __construct() {
         
     }

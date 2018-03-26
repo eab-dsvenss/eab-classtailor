@@ -9,6 +9,7 @@ namespace se\eab\php\classtailor\test;
 
 use se\eab\php\classtailor\model\content\AppendableContent;
 use se\eab\php\classtailor\model\removable\Removable;
+use se\eab\php\classtailor\model\replaceable\Replaceable;
 
 /**
  * Description of ClassFileTestHelper
@@ -23,12 +24,26 @@ class ClassFileTestHelper
         return function(AppendableContent $appendableContent) use ($content, $phpunit, $negate) {
             $generatedContent = self::stripAllWhiteSpace($appendableContent->getContent());
             $strippedContent = self::stripAllWhiteSpace($content);
-            if ($negate) {
-                $phpunit->assertNotContains($generatedContent, $strippedContent);
-            } else {
-                $phpunit->assertContains($generatedContent, $strippedContent);
-            }
+            self::assertStringContains($generatedContent, $strippedContent, $negate, $phpunit);
         };
+    }
+
+    public static function getReplaceableAssertLambda($content, $phpunit, $negate)
+    {
+        return function(Replaceable $replaceable) use ($content, $phpunit, $negate) {
+            $replacement = self::stripAllWhiteSpace($replaceable->getReplacement());
+            $strippedContent = self::stripAllWhiteSpace($content);
+            self::assertStringContains($replacement, $strippedContent, $negate, $phpunit);
+        };
+    }
+
+    private static function assertStringContains($needle, $haystack, $negate, $phpunit)
+    {
+        if ($negate) {
+            $phpunit->assertNotContains($needle, $haystack);
+        } else {
+            $phpunit->assertContains($needle, $haystack);
+        }
     }
 
     private static function stripAllWhiteSpace($content)

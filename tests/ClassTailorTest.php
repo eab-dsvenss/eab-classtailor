@@ -8,6 +8,7 @@ use se\eab\php\classtailor\model\content\DependencyContent;
 use se\eab\php\classtailor\model\content\VariableContent;
 use se\eab\php\classtailor\model\content\FunctionContent;
 use se\eab\php\classtailor\model\removable\RemovableFunction;
+use se\eab\php\classtailor\model\replaceable\Replaceable;
 use se\eab\php\classtailor\model\FileHandler;
 use se\eab\php\classtailor\test\ClassFileTestHelper;
 
@@ -53,8 +54,9 @@ public function testing() {
 }
 EOT
         ));
-        $this->classfile->addVariable(new VariableContent("public", "\$testvariable"));
+        $this->classfile->addVariable(new VariableContent("public", "testvariable"));
         $this->classfile->addRemovable(new RemovableFunction("public", "test", "Test"));
+        $this->classfile->addReplaceable(new Replaceable("public \\\$variable;", "private \$newvariable;"));
     }
 
     public function testTailorClasses()
@@ -66,24 +68,28 @@ EOT
 
         $contentAssertFn = ClassFileTestHelper::getContentAssertLambda($beforecontent, $instance, $negate);
         $removeAssertFn = ClassFileTestHelper::getRemoveAssertLambda($beforecontent, $instance, !$negate);
+        $replaceableAssertFn = ClassFileTestHelper::getReplaceableAssertLambda($beforecontent, $instance, $negate);
 
         ClassFileTestHelper::assertOverArray($cf->getDependencies(), $contentAssertFn);
         ClassFileTestHelper::assertOverArray($cf->getFunctions(), $contentAssertFn);
         ClassFileTestHelper::assertOverArray($cf->getVariables(), $contentAssertFn);
         ClassFileTestHelper::assertOverArray($cf->getRemovables(), $removeAssertFn);
+        ClassFileTestHelper::assertOverArray($cf->getReplaceables(), $replaceableAssertFn);
 
         $this->classtailor->tailorClasses([$this->classfile]);
-        
+
         $aftercontent = $this->filehandler->getFileContents($cf->getPath());
 
         $negate = false;
         $contentAssertFn = ClassFileTestHelper::getContentAssertLambda($aftercontent, $instance, $negate);
         $removeAssertFn = ClassFileTestHelper::getRemoveAssertLambda($aftercontent, $instance, !$negate);
-        
+        $replaceableAssertFn = ClassFileTestHelper::getReplaceableAssertLambda($aftercontent, $instance, $negate);
+
         ClassFileTestHelper::assertOverArray($cf->getDependencies(), $contentAssertFn);
         ClassFileTestHelper::assertOverArray($cf->getFunctions(), $contentAssertFn);
         ClassFileTestHelper::assertOverArray($cf->getVariables(), $contentAssertFn);
         ClassFileTestHelper::assertOverArray($cf->getRemovables(), $removeAssertFn);
+        ClassFileTestHelper::assertOverArray($cf->getReplaceables(), $replaceableAssertFn);
     }
 
 }

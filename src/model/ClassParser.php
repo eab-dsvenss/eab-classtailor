@@ -10,6 +10,7 @@ namespace se\eab\php\classtailor\model;
 use se\eab\php\classtailor\model\removable\Removable;
 use se\eab\php\classtailor\model\content\AppendableContent;
 use se\eab\php\classtailor\model\content\DependencyContent;
+use se\eab\php\classtailor\model\replaceable\Replaceable;
 
 /**
  * Description of FileParser
@@ -79,6 +80,11 @@ class ClassParser
         $depString .= $dependency->getContent() . PHP_EOL;
 
         $classcontent = preg_replace("/^([^;]*?)(;)(.*?)/", "$1$depString$3", $classcontent);
+    }
+
+    public function replace(&$classcontent, Replaceable $replaceable)
+    {
+        $classcontent = preg_replace("/" .$replaceable->getPattern() . "/", $replaceable->getReplacement(), $classcontent);
     }
 
 }

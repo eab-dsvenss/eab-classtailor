@@ -11,6 +11,7 @@ use se\eab\php\classtailor\model\content\DependencyContent;
 use se\eab\php\classtailor\model\content\FunctionContent;
 use se\eab\php\classtailor\model\content\VariableContent;
 use se\eab\php\classtailor\model\removable\Removable;
+use se\eab\php\classtailor\model\replaceable\Replaceable;
 
 /**
  * Description of ModelFile
@@ -33,6 +34,9 @@ class ClassFile
 
     /* @var FunctionContent[] */
     private $functions;
+    
+    /* @var Replaceable[] */
+    private $replaceables;
 
     public function __construct()
     {
@@ -40,6 +44,7 @@ class ClassFile
         $this->removables = [];
         $this->variables = [];
         $this->functions = [];
+        $this->replaceables = [];
     }
 
     public function setPath($path)
@@ -65,6 +70,10 @@ class ClassFile
     public function addRemovable(Removable $removable)
     {
         $this->removables[] = $removable;
+    }
+    
+    public function addReplaceable(Replaceable $replaceable) {
+        $this->replaceables[] = $replaceable;
     }
 
     public function getPath()
@@ -106,6 +115,11 @@ class ClassFile
     public function getFunctions()
     {
         return $this->functions;
+    }
+
+    public function getReplaceables()
+    {
+        return $this->replaceables;
     }
 
 }
