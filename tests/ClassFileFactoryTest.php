@@ -4,6 +4,7 @@ namespace se\eab\php\classtailor\test;
 
 use se\eab\php\classtailor\model\ClassFile;
 use se\eab\php\classtailor\model\content\DependencyContent;
+use se\eab\php\classtailor\model\content\TraitContent;
 use se\eab\php\classtailor\model\content\VariableContent;
 use se\eab\php\classtailor\model\content\FunctionContent;
 use se\eab\php\classtailor\model\removable\RemovableFunction;
@@ -12,6 +13,9 @@ use se\eab\php\classtailor\factory\ClassFileFactory;
 class ClassFileFactoryTest extends \Codeception\Test\Unit
 {
 
+    /**
+     * @var ClassFile
+     */
     private $classfile;
 
     /**
@@ -29,7 +33,7 @@ class ClassFileFactoryTest extends \Codeception\Test\Unit
 
     protected function _after()
     {
-        
+
     }
 
     private function createClassFile()
@@ -57,6 +61,10 @@ EOT
             "variables" => [
                 ["access" => "public", "name" => "dummy"],
                 ["access" => "public", "name" => "dummy2"]
+            ],
+            "traits" => [
+                ['name' => "trait1"],
+                ["name" => "trait2", "dependency" => "deptrait2"]
             ]
         ];
 
@@ -77,6 +85,12 @@ EOT
         foreach ($this->classfilearray["removablefns"] as $rfn) {
             $this->classfile->addRemovable(new RemovableFunction($rfn["access"], $rfn["name"], $rfn["content"]));
         }
+
+        foreach ($this->classfilearray['traits'] as $trait) {
+            $name = $trait['name'];
+            $dep = isset($trait['dependency']) ? $trait['dependency'] : NULL;
+            $this->classfile->addTrait(new TraitContent($name, $dep));
+        }
     }
 
     public function testCreateClassfileFromArray()
@@ -90,6 +104,7 @@ EOT
         $this->assertEquals($gcf->getFunctions(), $ecf->getFunctions());
         $this->assertEquals($gcf->getVariables(), $ecf->getVariables());
         $this->assertEquals($gcf->getRemovables(), $ecf->getRemovables());
+        $this->assertEquals($gcf->getTraits(), $ecf->getTraits());
     }
 
 }

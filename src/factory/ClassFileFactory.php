@@ -32,7 +32,7 @@ class ClassFileFactory
     
     /**
      * 
-     * @return ClassFileFactoryx
+     * @return ClassFileFactory
      */
     public static function getInstance() {
         if(!isset(self::$instance)) {
@@ -73,7 +73,7 @@ class ClassFileFactory
             foreach($classfileArray['traits'] as $trait) {
                 $name = $trait['name'];
                 $dependency = isset($trait['dependency']) ? $trait['dependency'] : NULL;
-                $classfile->addTrait(new TraitContent($name, $dependency);
+                $classfile->addTrait(new TraitContent($name, $dependency));
             }
         }
         
