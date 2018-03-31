@@ -47,6 +47,7 @@ class ClassTailor
         $this->addDependencies($classFile->getDependencies(), $classcontent);
         $this->addFunctions($classFile->getFunctions(), $classcontent);
         $this->addVariables($classFile->getVariables(), $classcontent);
+        $this->addTraits($classFile->getTraits(),$classcontent);
         $this->replaceReplaceables($classFile->getReplaceables(), $classcontent);
         $this->filehandler->writeToFile($path, $classcontent);
     }
@@ -62,6 +63,12 @@ class ClassTailor
     {
         foreach ($dependencies as $dependency) {
             $this->classparser->addDependency($classcontent, $dependency);
+        }
+    }
+
+    private function addTraits(array $traits, &$classcontent) {
+        foreach ($traits as $trait) {
+            $this->classparser->addTrait($classcontent, $trait);
         }
     }
 

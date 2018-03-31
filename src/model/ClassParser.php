@@ -11,6 +11,7 @@ use se\eab\php\classtailor\model\removable\Removable;
 use se\eab\php\classtailor\model\content\AppendableContent;
 use se\eab\php\classtailor\model\content\DependencyContent;
 use se\eab\php\classtailor\model\replaceable\Replaceable;
+use se\eab\php\classtailor\model\content\TraitContent;
 
 /**
  * Description of FileParser
@@ -36,7 +37,7 @@ class ClassParser
     }
 
     /**
-     * 
+     *
      * @return ClassParser
      */
     public static function getInstance($tablen = 4)
@@ -82,9 +83,17 @@ class ClassParser
         $classcontent = preg_replace("/^([^;]*?)(;)(.*?)/", "$1$depString$3", $classcontent);
     }
 
+    public function addTrait(&$classcontent, TraitContent $trait)
+    {
+        $this->addToBeginningOfClass($classcontent, $trait->getContent());
+        if ($trait->hasDependency()) {
+            $this->addDependency($classcontent, $trait->getDependencyContent());
+        }
+    }
+
     public function replace(&$classcontent, Replaceable $replaceable)
     {
-        $classcontent = preg_replace("/" .$replaceable->getPattern() . "/", $replaceable->getReplacement(), $classcontent);
+        $classcontent = preg_replace("/" . $replaceable->getPattern() . "/", $replaceable->getReplacement(), $classcontent);
     }
 
 }

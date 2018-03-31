@@ -13,6 +13,7 @@ use se\eab\php\classtailor\model\content\FunctionContent;
 use se\eab\php\classtailor\model\removable\RemovableFunction;
 use se\eab\php\classtailor\model\replaceable\Replaceable;
 use se\eab\php\classtailor\model\ClassFile;
+use se\eab\php\classtailor\model\content\TraitContent;
 
 /**
  * Description of TailorHelper
@@ -67,6 +68,14 @@ class ClassFileFactory
                 $classfile->addVariable(new VariableContent($variable['access'], $variable['name']));
             }
         }
+
+        if (isset($classfileArray['traits'])) {
+            foreach($classfileArray['traits'] as $trait) {
+                $name = $trait['name'];
+                $dependency = isset($trait['dependency']) ? $trait['dependency'] : NULL;
+                $classfile->addTrait(new TraitContent($name, $dependency);
+            }
+        }
         
         if (isset($classfileArray['removablefns'])) {
             foreach ($classfileArray['removablefns'] as $removablefn) {
@@ -79,8 +88,6 @@ class ClassFileFactory
                 $classfile->addReplaceable(new Replaceable($replaceable['pattern'], $replaceable['replacement']));
             }
         }
-        
-        
         
         if(isset($classfileArray["path"])) {
             $classfile->setPath($classfileArray["path"]);

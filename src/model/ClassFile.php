@@ -12,6 +12,7 @@ use se\eab\php\classtailor\model\content\FunctionContent;
 use se\eab\php\classtailor\model\content\VariableContent;
 use se\eab\php\classtailor\model\removable\Removable;
 use se\eab\php\classtailor\model\replaceable\Replaceable;
+use se\eab\php\classtailor\model\content\TraitContent;
 
 /**
  * Description of ModelFile
@@ -34,6 +35,9 @@ class ClassFile
 
     /* @var FunctionContent[] */
     private $functions;
+
+    /* @var TraitContent[] */
+    private $traits;
     
     /* @var Replaceable[] */
     private $replaceables;
@@ -44,6 +48,7 @@ class ClassFile
         $this->removables = [];
         $this->variables = [];
         $this->functions = [];
+        $this->traits = [];
         $this->replaceables = [];
     }
 
@@ -62,9 +67,13 @@ class ClassFile
         $this->variables[] = $varcontent;
     }
 
-    public function addDependency(DependencyContent $deppattern)
+    public function addDependency(DependencyContent $depcontent)
     {
-        $this->dependencies[] = $deppattern;
+        $this->dependencies[] = $depcontent;
+    }
+
+    public function addTrait(TraitContent $traitcontent) {
+        $this->traits[] = $traitcontent;
     }
 
     public function addRemovable(Removable $removable)
@@ -120,6 +129,11 @@ class ClassFile
     public function getReplaceables()
     {
         return $this->replaceables;
+    }
+
+    public function getTraits()
+    {
+        return $this->traits;
     }
 
 }
