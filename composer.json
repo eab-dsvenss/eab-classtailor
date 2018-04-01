@@ -7,7 +7,7 @@
             "name": "Daniel Svensson"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
             "se\\eab\\php\\classtailor\\": "src/",
