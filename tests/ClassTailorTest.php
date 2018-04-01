@@ -2,13 +2,7 @@
 
 namespace se\eab\php\classtailor\test;
 
-use se\eab\php\classtailor\model\ClassFile;
 use se\eab\php\classtailor\ClassTailor;
-use se\eab\php\classtailor\model\content\DependencyContent;
-use se\eab\php\classtailor\model\content\VariableContent;
-use se\eab\php\classtailor\model\content\FunctionContent;
-use se\eab\php\classtailor\model\removable\RemovableFunction;
-use se\eab\php\classtailor\model\replaceable\Replaceable;
 use se\eab\php\classtailor\model\FileHandler;
 use se\eab\php\classtailor\test\ClassFileTestHelper;
 
@@ -27,7 +21,7 @@ class ClassTailorTest extends \Codeception\Test\Unit
         $this->filehandler = FileHandler::getInstance();
         $this->basepath = codecept_data_dir();
         $this->copyTestClassFile();
-        $this->createClassFile();
+        $this->classfile = ClassFileTestHelper::createClassFile($this->testclasspath);
     }
 
     protected function _after()
@@ -43,22 +37,6 @@ class ClassTailorTest extends \Codeception\Test\Unit
         $this->filehandler->writeToFile($this->testclasspath, $content);
     }
 
-    private function createClassFile()
-    {
-        $this->classfile = new ClassFile();
-        $this->classfile->setPath($this->testclasspath);
-        $this->classfile->addDependency(new DependencyContent("testdependency"));
-        $this->classfile->addFunction(new FunctionContent(<<<EOT
-public function testing() {
-    \$testsomething;
-}
-EOT
-        ));
-        $this->classfile->addVariable(new VariableContent("public", "testvariable"));
-        $this->classfile->addRemovable(new RemovableFunction("public", "test", "Test"));
-        $this->classfile->addReplaceable(new Replaceable("public \\\$variable;", "private \$newvariable;"));
-    }
-
     public function testTailorClasses()
     {
         $instance = $this;
@@ -68,11 +46,13 @@ EOT
 
         $contentAssertFn = ClassFileTestHelper::getContentAssertLambda($beforecontent, $instance, $negate);
         $removeAssertFn = ClassFileTestHelper::getRemoveAssertLambda($beforecontent, $instance, !$negate);
+        $traitAssertFn = ClassFileTestHelper::getTraitAssertLambda($beforecontent, $instance, $negate);
         $replaceableAssertFn = ClassFileTestHelper::getReplaceableAssertLambda($beforecontent, $instance, $negate);
 
         ClassFileTestHelper::assertOverArray($cf->getDependencies(), $contentAssertFn);
         ClassFileTestHelper::assertOverArray($cf->getFunctions(), $contentAssertFn);
         ClassFileTestHelper::assertOverArray($cf->getVariables(), $contentAssertFn);
+        ClassFileTestHelper::assertOverArray($cf->getTraits(), $traitAssertFn);
         ClassFileTestHelper::assertOverArray($cf->getRemovables(), $removeAssertFn);
         ClassFileTestHelper::assertOverArray($cf->getReplaceables(), $replaceableAssertFn);
 
@@ -83,11 +63,13 @@ EOT
         $negate = false;
         $contentAssertFn = ClassFileTestHelper::getContentAssertLambda($aftercontent, $instance, $negate);
         $removeAssertFn = ClassFileTestHelper::getRemoveAssertLambda($aftercontent, $instance, !$negate);
+        $traitAssertFn = ClassFileTestHelper::getTraitAssertLambda($aftercontent, $instance, $negate);
         $replaceableAssertFn = ClassFileTestHelper::getReplaceableAssertLambda($aftercontent, $instance, $negate);
 
         ClassFileTestHelper::assertOverArray($cf->getDependencies(), $contentAssertFn);
         ClassFileTestHelper::assertOverArray($cf->getFunctions(), $contentAssertFn);
         ClassFileTestHelper::assertOverArray($cf->getVariables(), $contentAssertFn);
+        ClassFileTestHelper::assertOverArray($cf->getTraits(), $traitAssertFn);
         ClassFileTestHelper::assertOverArray($cf->getRemovables(), $removeAssertFn);
         ClassFileTestHelper::assertOverArray($cf->getReplaceables(), $replaceableAssertFn);
     }

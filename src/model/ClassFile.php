@@ -157,6 +157,7 @@ class ClassFile
             foreach ($classfile->getVariables() as $var) {
                 $this->addVariable($var);
             }
+            $this->setPath($classfile->getPath());
         }
     }
 
