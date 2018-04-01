@@ -136,4 +136,28 @@ class ClassFile
         return $this->traits;
     }
 
+
+    public function mergeClassFile(ClassFile &$classfile) {
+        if (isset($classfile)) {
+            foreach ($classfile->getTraits() as $trait) {
+                $this->addTrait($trait);
+            }
+            foreach ($classfile->getReplaceables() as $replaceable) {
+                $this->addReplaceable($replaceable);
+            }
+            foreach ($classfile->getDependencies() as $dep) {
+                $this->addDependency($dep);
+            }
+            foreach ($classfile->getFunctions() as $fn) {
+                $this->addFunction($fn);
+            }
+            foreach ($classfile->getRemovables() as $rem) {
+                $this->addRemovable($rem);
+            }
+            foreach ($classfile->getVariables() as $var) {
+                $this->addVariable($var);
+            }
+        }
+    }
+
 }
