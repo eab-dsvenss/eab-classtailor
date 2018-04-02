@@ -13,6 +13,7 @@ use se\eab\php\classtailor\model\content\VariableContent;
 use se\eab\php\classtailor\model\removable\Removable;
 use se\eab\php\classtailor\model\replaceable\Replaceable;
 use se\eab\php\classtailor\model\content\TraitContent;
+use se\eab\php\classtailor\model\removable\RemovableFunction;
 
 /**
  * Description of ModelFile
@@ -27,8 +28,10 @@ class ClassFile
     /* @var DependencyPattern[] */
     private $dependencies;
 
-    /* @var $removables Removable[] */
+    /* @var Removable[] */
     private $removables;
+    /* @var RemovableFunction */
+    private $removableFunctions;
 
     /* @var VariableContent[] */
     private $variables;
@@ -38,7 +41,7 @@ class ClassFile
 
     /* @var TraitContent[] */
     private $traits;
-    
+
     /* @var Replaceable[] */
     private $replaceables;
 
@@ -59,30 +62,48 @@ class ClassFile
 
     public function addFunction(FunctionContent $fncontent)
     {
-        $this->functions[] = $fncontent;
+        if (!in_array($fncontent, $this->functions)) {
+            $this->functions[] = $fncontent;
+        }
     }
 
     public function addVariable(VariableContent $varcontent)
     {
-        $this->variables[] = $varcontent;
+        if (!in_array($varcontent, $this->variables)) {
+            $this->variables[] = $varcontent;
+        }
     }
 
     public function addDependency(DependencyContent $depcontent)
     {
-        $this->dependencies[] = $depcontent;
+        if (!in_array($depcontent, $this->dependencies)) {
+            $this->dependencies[] = $depcontent;
+        }
     }
 
-    public function addTrait(TraitContent $traitcontent) {
-        $this->traits[] = $traitcontent;
-    }
-
-    public function addRemovable(Removable $removable)
+    public function addTrait(TraitContent $traitcontent)
     {
-        $this->removables[] = $removable;
+        if (!in_array($traitcontent, $this->traits)) {
+            $this->traits[] = $traitcontent;
+            if ($traitcontent->hasDependency()) {
+                $this->addDependency($traitcontent->getDependencyContent());
+            }
+        }
     }
-    
-    public function addReplaceable(Replaceable $replaceable) {
-        $this->replaceables[] = $replaceable;
+
+    public function addRemovableFunction(RemovableFunction $removablefn)
+    {
+        if (!in_array($removablefn, $this->removableFunctions)) {
+            $this->removables[] = $removablefn;
+            $this->removableFunctions[] = $removablefn;
+        }
+    }
+
+    public function addReplaceable(Replaceable $replaceable)
+    {
+        if (!in_array($replaceable, $this->replaceables)) {
+            $this->replaceables[] = $replaceable;
+        }
     }
 
     public function getPath()
@@ -91,7 +112,7 @@ class ClassFile
     }
 
     /**
-     * 
+     *
      * @return Removable[]
      */
     public function getRemovables()
@@ -100,7 +121,14 @@ class ClassFile
     }
 
     /**
-     * 
+     * @return RemovableFunction[]
+     */
+    public function getRemovableFunctions() {
+        return $this->removableFunctions;
+    }
+
+    /**
+     *
      * @return VariableContent[]
      */
     public function getVariables()
@@ -109,7 +137,7 @@ class ClassFile
     }
 
     /**
-     * 
+     *
      * @return DependencyContent[]
      */
     public function getDependencies()
@@ -118,7 +146,7 @@ class ClassFile
     }
 
     /**
-     * 
+     *
      * @return FunctionContent[]
      */
     public function getFunctions()
@@ -126,6 +154,9 @@ class ClassFile
         return $this->functions;
     }
 
+    /**
+     * @return Replaceable[]
+     */
     public function getReplaceables()
     {
         return $this->replaceables;
@@ -136,8 +167,43 @@ class ClassFile
         return $this->traits;
     }
 
+    public function hasDependencies()
+    {
+        return count($this->dependencies) > 0;
+    }
 
-    public function mergeClassFile(ClassFile &$classfile) {
+    public function hasTraits()
+    {
+        return count($this->traits) > 0;
+    }
+
+    public function hasReplaceables()
+    {
+        return count($this->replaceables) > 0;
+    }
+
+    public function hasRemovables()
+    {
+        return count($this->removables) > 0;
+    }
+
+    public function hasRemovableFunctions() {
+        return cound($this->removableFunctions) > 0;
+    }
+
+    public function hasVariables()
+    {
+        return count($this->functions) > 0;
+    }
+
+    public function hasFunctions()
+    {
+        return count($this->functions) > 0;
+    }
+
+
+    public function mergeClassFile(ClassFile &$classfile)
+    {
         if (isset($classfile)) {
             foreach ($classfile->getTraits() as $trait) {
                 $this->addTrait($trait);
@@ -151,8 +217,8 @@ class ClassFile
             foreach ($classfile->getFunctions() as $fn) {
                 $this->addFunction($fn);
             }
-            foreach ($classfile->getRemovables() as $rem) {
-                $this->addRemovable($rem);
+            foreach($classfile->getRemovableFunctions() as $rfn) {
+                $this->addRemovableFunction($rfn);
             }
             foreach ($classfile->getVariables() as $var) {
                 $this->addVariable($var);
@@ -160,5 +226,4 @@ class ClassFile
             $this->setPath($classfile->getPath());
         }
     }
-
 }

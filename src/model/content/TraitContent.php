@@ -19,10 +19,12 @@ class TraitContent extends AppendableContent
 {
 
     private $dependency;
+    private $name;
 
-    public function __construct($traitstr, $dependencystr = NULL)
+    public function __construct($name, $dependencystr = NULL)
     {
-        $this->content = "use ".trim($traitstr) . ";";
+        $this->name = $name;
+        $this->content = "use ".trim($name) . ";";
 
         if (isset($dependencystr)) {
             $this->dependency = new DependencyContent($dependencystr);
@@ -37,5 +39,9 @@ class TraitContent extends AppendableContent
     public function getDependencyContent()
     {
         return $this->dependency;
+    }
+
+    public function getName() {
+        return $this->name;
     }
 }

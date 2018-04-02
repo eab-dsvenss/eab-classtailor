@@ -86,9 +86,9 @@ class ClassParser
     public function addTrait(&$classcontent, TraitContent $trait)
     {
         $this->addToBeginningOfClass($classcontent, $trait->getContent());
-        if ($trait->hasDependency()) {
-            $this->addDependency($classcontent, $trait->getDependencyContent());
-        }
+        //if ($trait->hasDependency()) {
+        //    $this->addDependency($classcontent, $trait->getDependencyContent());
+        //}
     }
 
     public function replace(&$classcontent, Replaceable $replaceable)

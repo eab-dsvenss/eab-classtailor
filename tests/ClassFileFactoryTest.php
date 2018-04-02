@@ -83,7 +83,7 @@ EOT
         }
 
         foreach ($this->classfilearray["removablefns"] as $rfn) {
-            $this->classfile->addRemovable(new RemovableFunction($rfn["access"], $rfn["name"], $rfn["content"]));
+            $this->classfile->addRemovableFunction(new RemovableFunction($rfn["access"], $rfn["name"], $rfn["content"]));
         }
 
         foreach ($this->classfilearray['traits'] as $trait) {

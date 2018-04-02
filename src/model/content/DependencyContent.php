@@ -16,8 +16,15 @@ use se\eab\php\classtailor\model\content\AppendableContent;
  */
 class DependencyContent extends AppendableContent
 {
-    public function __construct($depstr)
+    private $name;
+
+    public function __construct($name)
     {
-        $this->content = "use ".trim($depstr) . ";";
+        $this->name = $name;
+        $this->content = "use ".trim($name) . ";";
+    }
+
+    public function getName() {
+        return $this->name;
     }
 }
