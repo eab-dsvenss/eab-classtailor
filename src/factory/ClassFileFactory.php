@@ -115,6 +115,7 @@ class ClassFileFactory
     public function getArrayFromClassFile(ClassFile $classfile)
     {
         $classfilearray = [];
+        $classfilearray[self::CLASSNAME_KEY] = $classfile->getClassName();
         $classfilearray[self::REMOVABLEFNS_KEY] = [];
         $classfilearray[self::TRAITS_KEY] = [];
         $classfilearray[self::VARIABLES_KEY] = [];
