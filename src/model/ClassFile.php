@@ -23,6 +23,8 @@ use se\eab\php\classtailor\model\removable\RemovableFunction;
 class ClassFile
 {
 
+    private $classname;
+
     private $path;
 
     /* @var DependencyPattern[] */
@@ -30,7 +32,7 @@ class ClassFile
 
     /* @var Removable[] */
     private $removables;
-    /* @var RemovableFunction */
+    /* @var RemovableFunction[] */
     private $removableFunctions;
 
     /* @var VariableContent[] */
@@ -45,14 +47,16 @@ class ClassFile
     /* @var Replaceable[] */
     private $replaceables;
 
-    public function __construct()
+    public function __construct($classname)
     {
+        $this->classname = $classname;
         $this->dependencies = [];
         $this->removables = [];
         $this->variables = [];
         $this->functions = [];
         $this->traits = [];
         $this->replaceables = [];
+        $this->removableFunctions = [];
     }
 
     public function setPath($path)
@@ -123,7 +127,8 @@ class ClassFile
     /**
      * @return RemovableFunction[]
      */
-    public function getRemovableFunctions() {
+    public function getRemovableFunctions()
+    {
         return $this->removableFunctions;
     }
 
@@ -187,8 +192,9 @@ class ClassFile
         return count($this->removables) > 0;
     }
 
-    public function hasRemovableFunctions() {
-        return cound($this->removableFunctions) > 0;
+    public function hasRemovableFunctions()
+    {
+        return count($this->removableFunctions) > 0;
     }
 
     public function hasVariables()
@@ -201,6 +207,10 @@ class ClassFile
         return count($this->functions) > 0;
     }
 
+    public function getClassName()
+    {
+        return $this->classname;
+    }
 
     public function mergeClassFile(ClassFile &$classfile)
     {
@@ -217,7 +227,7 @@ class ClassFile
             foreach ($classfile->getFunctions() as $fn) {
                 $this->addFunction($fn);
             }
-            foreach($classfile->getRemovableFunctions() as $rfn) {
+            foreach ($classfile->getRemovableFunctions() as $rfn) {
                 $this->addRemovableFunction($rfn);
             }
             foreach ($classfile->getVariables() as $var) {

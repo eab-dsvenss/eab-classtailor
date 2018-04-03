@@ -28,14 +28,15 @@ class ClassFileFactory
     const FUNCTIONS_KEY = "functions";
     const ACCESS_KEY = "access";
     const NAME_KEY = "name";
-    const VARIABLES_KEY = self::VARIABLES_KEY;
+    const VARIABLES_KEY = "variables";
     const TRAITS_KEY = "traits";
     const REMOVABLEFNS_KEY = "removables";
     const REPLACEABLES_KEY = "replaceables";
     const CONTENT_KEY = "content";
     const PATTERN_KEY = "pattern";
     const REPLACEMENT_KEY = "replacement";
-    const PATH_KEY = self::PATH_KEY;
+    const PATH_KEY = "path";
+    const CLASSNAME_KEY = "classname";
 
     private static $instance;
 
@@ -64,7 +65,7 @@ class ClassFileFactory
      */
     public function createClassfileFromArray(array $classfileArray)
     {
-        $classfile = new ClassFile();
+        $classfile = new ClassFile($classfileArray[self::CLASSNAME_KEY]);
 
         if (isset($classfileArray[self::DEPENDENCIES_KEY])) {
             foreach ($classfileArray[self::DEPENDENCIES_KEY] as $dep) {
