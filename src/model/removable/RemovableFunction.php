@@ -19,9 +19,12 @@ class RemovableFunction extends Removable
     private $name;
     private $content;
 
-    public function __construct($fnaccess, $fnname, $fncontent)
+    public function __construct($access, $name, $content)
     {
-        $this->pattern = "$fnaccess function ".$fnname."\([^\{]*?{[^\}]*?".$fncontent."[^\}]*?}";
+        $this->access = $access;
+        $this->name = $name;
+        $this->content = $content;
+        $this->pattern = "$access function ".$name."\([^\{]*?{[^\}]*?".$content."[^\}]*?}";
     }
 
     public function getAccess() {

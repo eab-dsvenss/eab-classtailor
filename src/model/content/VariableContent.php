@@ -20,9 +20,11 @@ class VariableContent extends AppendableContent
     private $access;
     private $name;
 
-    public function __construct($varaccess, $name)
+    public function __construct($access, $name)
     {
-        $this->content = trim($varaccess) . " $" . trim($name) . ";";
+        $this->access = $access;
+        $this->name = $name;
+        $this->content = trim($access) . " $" . trim($name) . ";";
     }
 
     public function getAccess() {
