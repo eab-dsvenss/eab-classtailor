@@ -37,6 +37,7 @@ class ClassFileFactory
     const REPLACEMENT_KEY = "replacement";
     const PATH_KEY = "path";
     const CLASSNAME_KEY = "classname";
+    const VALUE_KEY = "value";
 
     private static $instance;
 
@@ -81,7 +82,8 @@ class ClassFileFactory
 
         if (isset($classfileArray[self::VARIABLES_KEY])) {
             foreach ($classfileArray[self::VARIABLES_KEY] as $variable) {
-                $classfile->addVariable(new VariableContent($variable[self::ACCESS_KEY], $variable[self::NAME_KEY]));
+                $value = isset($variable[self::VALUE_KEY]) ? $variable[self::VALUE_KEY] : NULL;
+                $classfile->addVariable(new VariableContent($variable[self::ACCESS_KEY], $variable[self::NAME_KEY], $value));
             }
         }
 
@@ -137,7 +139,11 @@ class ClassFileFactory
 
         if ($classfile->hasVariables()) {
             foreach ($classfile->getVariables() as $var) {
-                $classfilearray[self::VARIABLES_KEY][] = [self::ACCESS_KEY => $var->getAccess(), self::NAME_KEY => $var->getName()];
+                $values = [self::ACCESS_KEY => $var->getAccess(), self::NAME_KEY => $var->getName()];
+                if ($var->hasValue()) {
+                    $values[self::VALUE_KEY] = $var->getValue();
+                }
+                $classfilearray[self::VARIABLES_KEY][] = $values;
             }
         }
 

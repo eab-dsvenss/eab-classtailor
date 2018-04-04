@@ -19,12 +19,14 @@ class VariableContent extends AppendableContent
 
     private $access;
     private $name;
+    private $value;
 
-    public function __construct($access, $name)
+    public function __construct($access, $name, $value = NULL)
     {
         $this->access = $access;
         $this->name = $name;
-        $this->content = trim($access) . " $" . trim($name) . ";";
+        $this->value = $value;
+        $this->content = trim($access) . " $" . trim($name) . (isset($value) ? " = $value" : "") . ";";
     }
 
     public function getAccess() {
@@ -33,6 +35,14 @@ class VariableContent extends AppendableContent
 
     public function getName() {
         return $this->name;
+    }
+
+    public function hasValue() {
+        return isset($this->value);
+    }
+
+    public function getValue() {
+        return $this->value;
     }
 
 }
