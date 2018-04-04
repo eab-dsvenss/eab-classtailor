@@ -44,13 +44,22 @@ class FileHandler
     }
 
     /**
-     * 
-     * @param string $path
-     * @param string $content
+     * @param $path
+     * @param $content
+     * @return bool|int
      */
     public function writeToFile($path, $content)
     {
-        file_put_contents($path, $content);
+        return file_put_contents($path, $content);
+    }
+
+    /**
+     * @param $path
+     * @param $content
+     * @return bool|int
+     */
+    public function appendToFile($path, $content) {
+        return file_put_contents($path, $content, FILE_APPEND);
     }
 
 }
