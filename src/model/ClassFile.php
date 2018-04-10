@@ -23,8 +23,6 @@ use se\eab\php\classtailor\model\removable\RemovableFunction;
 class ClassFile
 {
 
-    private $classname;
-
     private $path;
 
     /* @var DependencyPattern[] */
@@ -47,9 +45,8 @@ class ClassFile
     /* @var Replaceable[] */
     private $replaceables;
 
-    public function __construct($classname)
+    public function __construct()
     {
-        $this->classname = $classname;
         $this->dependencies = [];
         $this->removables = [];
         $this->variables = [];
@@ -205,11 +202,6 @@ class ClassFile
     public function hasFunctions()
     {
         return count($this->functions) > 0;
-    }
-
-    public function getClassName()
-    {
-        return $this->classname;
     }
 
     public function mergeClassFile(ClassFile &$classfile)
