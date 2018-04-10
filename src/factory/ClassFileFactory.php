@@ -30,7 +30,7 @@ class ClassFileFactory
     const NAME_KEY = "name";
     const VARIABLES_KEY = "variables";
     const TRAITS_KEY = "traits";
-    const REMOVABLEFNS_KEY = "removables";
+    const REMOVABLEFNS_KEY = "removablefns";
     const REPLACEABLES_KEY = "replaceables";
     const CONTENT_KEY = "content";
     const PATTERN_KEY = "pattern";

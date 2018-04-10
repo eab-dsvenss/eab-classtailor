@@ -5,6 +5,10 @@
  * URL: http://www.gnu.org/licenses/gpl.html
  */
 use \Exception;
+use se\test\Dep1;
+
+use testdependency;
+
 /**
  * Description of TestClass
  *
@@ -12,12 +16,20 @@ use \Exception;
  */
 class TestClass
 {
-    public $variable;
+    use Dep2;
+
+    use Dep1;
+
+    public $testvariable;
+
+    public function testing() {
+        $testsomething;
+    }
+
+    private $newvariable;
     public function __construct() {
         
     }
     
-    public function test() {
-        $Test;
-    }
+    
 }

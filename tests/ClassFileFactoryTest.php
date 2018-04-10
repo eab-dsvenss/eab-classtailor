@@ -39,9 +39,9 @@ class ClassFileFactoryTest extends \Codeception\Test\Unit
     private function createClassFile()
     {
         $this->classfilearray = [
-            "path" => "dummpath",
-            "dependencies" => ["dep1", "dep2"],
-            "functions" => [
+            ClassFileFactory::PATH_KEY => "dummpath",
+            ClassFileFactory::DEPENDENCIES_KEY => ["dep1", "dep2"],
+            ClassFileFactory::FUNCTIONS_KEY => [
                 <<<EOT
 public function test() {
     \$test = "";
@@ -54,41 +54,41 @@ public function test2() {
 }
 EOT
             ],
-            "removablefns" => [
-                ["access" => "public", "name" => "dummyName", "content" => "dummycontent"],
-                ["access" => "public", "name" => "dummyName2", "content" => "dummycontent2"],
+            ClassFileFactory::REMOVABLEFNS_KEY => [
+                [ClassFileFactory::ACCESS_KEY => "public", ClassFileFactory::NAME_KEY => "dummyName", ClassFileFactory::CONTENT_KEY => "dummycontent"],
+                [ClassFileFactory::ACCESS_KEY => "public", ClassFileFactory::NAME_KEY => "dummyName2", ClassFileFactory::CONTENT_KEY => "dummycontent2"],
             ],
-            "variables" => [
-                ["access" => "public", "name" => "dummy"],
-                ["access" => "public", "name" => "dummy2"]
+            ClassFileFactory::VARIABLES_KEY => [
+                [ClassFileFactory::ACCESS_KEY => "public", ClassFileFactory::NAME_KEY => "dummy"],
+                [ClassFileFactory::ACCESS_KEY => "public", ClassFileFactory::NAME_KEY => "dummy2"]
             ],
-            "traits" => [
-                ['name' => "trait1"],
-                ["name" => "trait2", "dependency" => "deptrait2"]
+            ClassFileFactory::TRAITS_KEY => [
+                [ClassFileFactory::NAME_KEY => "trait1"],
+                [ClassFileFactory::NAME_KEY => "trait2", ClassFileFactory::DEPENDENCY_KEY => "deptrait2"]
             ]
         ];
 
         $this->classfile = new ClassFile();
-        $this->classfile->setPath($this->classfilearray["path"]);
-        foreach ($this->classfilearray["dependencies"] as $dep) {
+        $this->classfile->setPath($this->classfilearray[ClassFileFactory::PATH_KEY]);
+        foreach ($this->classfilearray[ClassFileFactory::DEPENDENCIES_KEY] as $dep) {
             $this->classfile->addDependency(new DependencyContent($dep));
         }
 
-        foreach ($this->classfilearray["functions"] as $fn) {
+        foreach ($this->classfilearray[ClassFileFactory::FUNCTIONS_KEY] as $fn) {
             $this->classfile->addFunction(new FunctionContent($fn));
         }
 
-        foreach ($this->classfilearray["variables"] as $var) {
-            $this->classfile->addVariable(new VariableContent($var["access"], $var["name"]));
+        foreach ($this->classfilearray[ClassFileFactory::VARIABLES_KEY] as $var) {
+            $this->classfile->addVariable(new VariableContent($var[ClassFileFactory::ACCESS_KEY], $var[ClassFileFactory::NAME_KEY]));
         }
 
-        foreach ($this->classfilearray["removablefns"] as $rfn) {
-            $this->classfile->addRemovableFunction(new RemovableFunction($rfn["access"], $rfn["name"], $rfn["content"]));
+        foreach ($this->classfilearray[ClassFileFactory::REMOVABLEFNS_KEY] as $rfn) {
+            $this->classfile->addRemovableFunction(new RemovableFunction($rfn[ClassFileFactory::ACCESS_KEY], $rfn[ClassFileFactory::NAME_KEY], $rfn[ClassFileFactory::CONTENT_KEY]));
         }
 
-        foreach ($this->classfilearray['traits'] as $trait) {
-            $name = $trait['name'];
-            $dep = isset($trait['dependency']) ? $trait['dependency'] : NULL;
+        foreach ($this->classfilearray[ClassFileFactory::TRAITS_KEY] as $trait) {
+            $name = $trait[ClassFileFactory::NAME_KEY];
+            $dep = isset($trait[ClassFileFactory::DEPENDENCY_KEY]) ? $trait[ClassFileFactory::DEPENDENCY_KEY] : NULL;
             $this->classfile->addTrait(new TraitContent($name, $dep));
         }
     }

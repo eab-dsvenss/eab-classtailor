@@ -103,7 +103,7 @@ public function testing() {
 EOT
         ));
         $classfile->addVariable(new VariableContent("public", "testvariable"));
-        $classfile->addRemovable(new RemovableFunction("public", "test", "Test"));
+        $classfile->addRemovableFunction(new RemovableFunction("public", "test", "Test"));
         $classfile->addReplaceable(new Replaceable("public \\\$variable;", "private \$newvariable;"));
         $classfile->addTrait(new TraitContent("Dep1", "se\\test\\Dep1"));
         $classfile->addTrait(new TraitContent("Dep2"));
