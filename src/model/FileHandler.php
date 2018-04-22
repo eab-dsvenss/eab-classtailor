@@ -6,6 +6,7 @@
  */
 
 namespace se\eab\php\classtailor\model;
+use \Exception;
 
 /**
  * Description of FileHandler
@@ -47,10 +48,13 @@ class FileHandler
      * @param $path
      * @param $content
      * @return bool|int
+     * @throws Exception
      */
     public function writeToFile($path, $content)
     {
-        return file_put_contents($path, $content);
+        if (file_put_contents($path, $content) === FALSE) {
+            throw new Exception("Could not write file");
+        }
     }
 
     /**
