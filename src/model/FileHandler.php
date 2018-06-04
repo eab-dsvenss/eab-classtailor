@@ -55,6 +55,8 @@ class FileHandler
         if (file_put_contents($path, $content) === FALSE) {
             throw new Exception("Could not write file");
         }
+
+        return true;
     }
 
     /**
