@@ -204,7 +204,7 @@ class ClassFile
         return count($this->functions) > 0;
     }
 
-    public function mergeClassFile(ClassFile &$classfile)
+    public function mergeClassFile(ClassFile &$classfile = NULL)
     {
         if (isset($classfile)) {
             foreach ($classfile->getTraits() as $trait) {
