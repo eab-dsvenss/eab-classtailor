@@ -44,11 +44,11 @@ class ClassTailor
         $path = $classFile->getPath();
         $classcontent = $this->filehandler->getFileContents($path);
         $this->removeRemovables($classFile->getRemovables(), $classcontent);
+        $this->replaceReplaceables($classFile->getReplaceables(), $classcontent);
         $this->addDependencies($classFile->getDependencies(), $classcontent);
         $this->addFunctions($classFile->getFunctions(), $classcontent);
         $this->addVariables($classFile->getVariables(), $classcontent);
         $this->addTraits($classFile->getTraits(),$classcontent);
-        $this->replaceReplaceables($classFile->getReplaceables(), $classcontent);
         $this->filehandler->writeToFile($path, $classcontent);
     }
 
