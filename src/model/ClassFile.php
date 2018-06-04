@@ -204,7 +204,12 @@ class ClassFile
         return count($this->functions) > 0;
     }
 
-    public function mergeClassFile(ClassFile &$classfile = NULL)
+    public function hasPath()
+    {
+        return isset($this->path);
+    }
+
+    public function mergeClassFile(ClassFile &$classfile = null)
     {
         if (isset($classfile)) {
             foreach ($classfile->getTraits() as $trait) {
@@ -225,7 +230,10 @@ class ClassFile
             foreach ($classfile->getVariables() as $var) {
                 $this->addVariable($var);
             }
-            $this->setPath($classfile->getPath());
+
+            if ($classfile->hasPath()) {
+                $this->setPath($classfile->getPath());
+            }
         }
     }
 }
