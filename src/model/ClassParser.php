@@ -67,7 +67,10 @@ class ClassParser
 
     public function addVariable(&$classcontent, AppendableContent $content)
     {
-        $this->addToBeginningOfClass($classcontent, $content->getContent());
+        $variable = $content->getContent();
+        if (strpos($classcontent, $variable) === FALSE) {
+            $this->addToBeginningOfClass($classcontent, $variable);
+        }
     }
 
     public function addFunction(&$classcontent, AppendableContent $content)
