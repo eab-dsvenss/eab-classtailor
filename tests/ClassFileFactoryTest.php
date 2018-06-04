@@ -9,6 +9,7 @@ use se\eab\php\classtailor\model\content\VariableContent;
 use se\eab\php\classtailor\model\content\FunctionContent;
 use se\eab\php\classtailor\model\removable\RemovableFunction;
 use se\eab\php\classtailor\factory\ClassFileFactory;
+use se\eab\php\classtailor\model\replaceable\Replaceable;
 
 class ClassFileFactoryTest extends \Codeception\Test\Unit
 {
@@ -39,33 +40,44 @@ class ClassFileFactoryTest extends \Codeception\Test\Unit
     private function createClassFile()
     {
         $this->classfilearray = [
-            ClassFileFactory::PATH_KEY => "dummpath",
-            ClassFileFactory::DEPENDENCIES_KEY => ["dep1", "dep2"],
-            ClassFileFactory::FUNCTIONS_KEY => [
-                <<<EOT
+          ClassFileFactory::PATH_KEY => "dummpath",
+          ClassFileFactory::DEPENDENCIES_KEY => ["dep1", "dep2"],
+          ClassFileFactory::FUNCTIONS_KEY => [
+            <<<EOT
 public function test() {
     \$test = "";
 }
 EOT
-                ,
-                <<<EOT
+              ,
+            <<<EOT
 public function test2() {
     \$test2 = "";
 }
 EOT
+          ],
+          ClassFileFactory::REMOVABLEFNS_KEY => [
+            [
+              ClassFileFactory::ACCESS_KEY => "public",
+              ClassFileFactory::NAME_KEY => "dummyName",
+              ClassFileFactory::CONTENT_KEY => "dummycontent"
             ],
-            ClassFileFactory::REMOVABLEFNS_KEY => [
-                [ClassFileFactory::ACCESS_KEY => "public", ClassFileFactory::NAME_KEY => "dummyName", ClassFileFactory::CONTENT_KEY => "dummycontent"],
-                [ClassFileFactory::ACCESS_KEY => "public", ClassFileFactory::NAME_KEY => "dummyName2", ClassFileFactory::CONTENT_KEY => "dummycontent2"],
+            [
+              ClassFileFactory::ACCESS_KEY => "public",
+              ClassFileFactory::NAME_KEY => "dummyName2",
+              ClassFileFactory::CONTENT_KEY => "dummycontent2"
             ],
-            ClassFileFactory::VARIABLES_KEY => [
-                [ClassFileFactory::ACCESS_KEY => "public", ClassFileFactory::NAME_KEY => "dummy"],
-                [ClassFileFactory::ACCESS_KEY => "public", ClassFileFactory::NAME_KEY => "dummy2"]
-            ],
-            ClassFileFactory::TRAITS_KEY => [
-                [ClassFileFactory::NAME_KEY => "trait1"],
-                [ClassFileFactory::NAME_KEY => "trait2", ClassFileFactory::DEPENDENCY_KEY => "deptrait2"]
-            ]
+          ],
+          ClassFileFactory::VARIABLES_KEY => [
+            [ClassFileFactory::ACCESS_KEY => "public", ClassFileFactory::NAME_KEY => "dummy"],
+            [ClassFileFactory::ACCESS_KEY => "public", ClassFileFactory::NAME_KEY => "dummy2"]
+          ],
+          ClassFileFactory::TRAITS_KEY => [
+            [ClassFileFactory::NAME_KEY => "trait1"],
+            [ClassFileFactory::NAME_KEY => "trait2", ClassFileFactory::DEPENDENCY_KEY => "deptrait2"]
+          ],
+          ClassFileFactory::REPLACEABLES_KEY => [
+            [ClassFileFactory::PATTERN_KEY => "pattern1", ClassFileFactory::REPLACEMENT_KEY => "replacement"]
+          ]
         ];
 
         $this->classfile = new ClassFile();
@@ -79,17 +91,25 @@ EOT
         }
 
         foreach ($this->classfilearray[ClassFileFactory::VARIABLES_KEY] as $var) {
-            $this->classfile->addVariable(new VariableContent($var[ClassFileFactory::ACCESS_KEY], $var[ClassFileFactory::NAME_KEY]));
+            $this->classfile->addVariable(new VariableContent($var[ClassFileFactory::ACCESS_KEY],
+              $var[ClassFileFactory::NAME_KEY]));
         }
 
         foreach ($this->classfilearray[ClassFileFactory::REMOVABLEFNS_KEY] as $rfn) {
-            $this->classfile->addRemovableFunction(new RemovableFunction($rfn[ClassFileFactory::ACCESS_KEY], $rfn[ClassFileFactory::NAME_KEY], $rfn[ClassFileFactory::CONTENT_KEY]));
+            $this->classfile->addRemovableFunction(new RemovableFunction($rfn[ClassFileFactory::ACCESS_KEY],
+              $rfn[ClassFileFactory::NAME_KEY], $rfn[ClassFileFactory::CONTENT_KEY]));
         }
 
         foreach ($this->classfilearray[ClassFileFactory::TRAITS_KEY] as $trait) {
             $name = $trait[ClassFileFactory::NAME_KEY];
-            $dep = isset($trait[ClassFileFactory::DEPENDENCY_KEY]) ? $trait[ClassFileFactory::DEPENDENCY_KEY] : NULL;
+            $dep = isset($trait[ClassFileFactory::DEPENDENCY_KEY]) ? $trait[ClassFileFactory::DEPENDENCY_KEY] : null;
             $this->classfile->addTrait(new TraitContent($name, $dep));
+        }
+
+        foreach($this->classfilearray[ClassFileFactory::REPLACEABLES_KEY] as $replaceable) {
+            $pattern = $replaceable[ClassFileFactory::PATTERN_KEY];
+            $replacement = $replaceable[ClassFileFactory::REPLACEMENT_KEY];
+            $this->classfile->addReplaceable(new Replaceable($pattern, $replacement));
         }
     }
 
@@ -105,6 +125,7 @@ EOT
         $this->assertEquals($gcf->getVariables(), $ecf->getVariables());
         $this->assertEquals($gcf->getRemovables(), $ecf->getRemovables());
         $this->assertEquals($gcf->getTraits(), $ecf->getTraits());
+        $this->assertEquals($gcf->getReplaceables(), $ecf->getReplaceables());
     }
 
 }
